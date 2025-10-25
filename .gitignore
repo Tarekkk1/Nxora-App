@@ -1,0 +1,30 @@
+# Flutter/Dart specific
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Firebase credentials and sensitive files
+lms_admin/lib/configs/fcm_config.dart
+**/google-services.json
+**/GoogleService-Info.plist
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Private keys and certificates
+*.p12
+*.key
+*.pem
