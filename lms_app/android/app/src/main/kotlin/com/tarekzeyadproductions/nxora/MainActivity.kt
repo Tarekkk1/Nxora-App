@@ -1,4 +1,4 @@
-package com.tarekzeyadproduction.lms_app
+package com.tarekzeyadproductions.nxora
 
 import io.flutter.embedding.android.FlutterActivity
 

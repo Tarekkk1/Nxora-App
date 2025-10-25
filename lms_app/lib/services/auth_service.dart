@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lms_app/services/device_service.dart';
+import 'package:lms_app/services/device_validation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,25 +20,10 @@ class AuthService {
 
   Future<UserCredential?> loginWithEmailPassword(BuildContext context, String email, String password) async {
     try {
-      // Get current device ID
-      final currentDeviceId = await DeviceService.getDeviceId();
-      
-      // Get user document from Firestore first to check device ID
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .get();
-
-      if (userDoc.docs.isNotEmpty) {
-        final userData = userDoc.docs.first.data();
-        final storedDeviceId = userData['device_id'];
-
-        // If device ID exists and doesn't match
-        if (userData['email'] != 'tarekzeyad31@yahoo.com' && storedDeviceId != null && storedDeviceId != currentDeviceId) {
-          if (!context.mounted) return null;
-          openSnackbarFailure(context, 'This account can only be accessed from the original device');
-          return null;
-        }
+      // Validate device access before attempting login
+      final isDeviceAllowed = await DeviceValidationService.validateDeviceAccess(context, email);
+      if (!isDeviceAllowed) {
+        return null;
       }
 
       // Proceed with login
@@ -46,8 +32,14 @@ class AuthService {
         password: password
       );
 
-      // If this is first login (no device ID stored), save the current device ID
-      if (userDoc.docs.isEmpty || userDoc.docs.first.data()['device_id'] == null) {
+      // If this is first login from this device, save the current device ID
+      final currentDeviceId = await DeviceService.getDeviceId();
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      if (!userDoc.exists || userDoc.data()?['device_id'] == null) {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user!.uid)
@@ -195,9 +187,16 @@ class AuthService {
   Future<UserCredential?> signUpWithEmailPassword(BuildContext context, String email, String password) async {
     UserCredential? user;
     try {
+      // Get current device ID for new signup
+      final currentDeviceId = await DeviceService.getDeviceId();
+      
       user = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      
+      // Note: Device ID will be saved through the user model in the signup flow
+      // This ensures every new account is tied to the device it was created on
+      
     } on FirebaseAuthException catch (e) {
-      debugPrint('error: e');
+      debugPrint('error: $e');
       if (!context.mounted) return null;
       openSnackbarFailure(context, e.message);
     }

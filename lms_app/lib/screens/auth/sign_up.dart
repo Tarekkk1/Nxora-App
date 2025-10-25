@@ -9,6 +9,7 @@ import 'package:lms_app/models/user_model.dart';
 import 'package:lms_app/screens/auth/login.dart';
 import 'package:lms_app/screens/splash.dart';
 import 'package:lms_app/services/auth_service.dart';
+import 'package:lms_app/services/device_service.dart';
 import 'package:lms_app/services/firebase_service.dart';
 import 'package:lms_app/utils/next_screen.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
@@ -34,7 +35,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool offsecureText = true;
   IconData lockIcon = LineIcons.lock;
 
-  UserModel _userModel(UserCredential userCredential) {
+  Future<UserModel> _userModel(UserCredential userCredential) async {
+    final deviceId = await DeviceService.getDeviceId();
     final UserModel user = UserModel(
       id: userCredential.user!.uid,
       email: userCredential.user!.email ?? emailCtlr.text,
@@ -42,6 +44,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       createdAt: DateTime.now().toUtc(),
       imageUrl: userCredential.user?.photoURL,
       platform: Platform.isAndroid ? 'Android' : 'iOS',
+      deviceId: deviceId,
     );
     return user;
   }
@@ -56,7 +59,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         return null;
       });
       if (userCredential != null && userCredential.user != null) {
-        await FirebaseService().saveUserData(_userModel(userCredential));
+        final userModel = await _userModel(userCredential);
+        await FirebaseService().saveUserData(userModel);
         await FirebaseService().updateUserStats();
         _btnController.success();
         await AuthService().sendEmailVerification();

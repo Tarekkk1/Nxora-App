@@ -14,21 +14,24 @@ class CustomButtons {
   }) {
     return OutlinedButton.icon(
       style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.all(15),
-          backgroundColor: bgColor,
-          foregroundColor: foregroundColor,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          )),
-      icon: Icon(
-        icon,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        backgroundColor: bgColor,
+        foregroundColor: foregroundColor,
+        elevation: 0,
+        side: BorderSide(color: foregroundColor, width: 1.5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
+      icon: Icon(icon, size: 18),
       label: Visibility(
         visible: !Responsive.isMobile(context),
         child: Text(
           text,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: foregroundColor),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: foregroundColor,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       onPressed: onPressed,
@@ -49,15 +52,58 @@ class CustomButtons {
     return RoundedLoadingButton(
       onPressed: onPressed,
       animateOnTap: false,
-      color: bgColor ?? Theme.of(context).primaryColor,
+      color: bgColor ?? const Color(0xFF1c6ea4),
       width: width ?? MediaQuery.of(context).size.width,
       elevation: 0,
-      height: height ?? 50,
-      borderRadius: borderRadius ?? 0,
+      height: height ?? 52,
+      borderRadius: borderRadius ?? 12,
       controller: buttonController,
       child: Text(
         text,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  static ElevatedButton modernButton(
+    BuildContext context, {
+    required String text,
+    required VoidCallback onPressed,
+    Color? bgColor,
+    Color? textColor,
+    IconData? icon,
+    double? radius,
+    EdgeInsets? padding,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: bgColor ?? const Color(0xFF1c6ea4),
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius ?? 12),
+        ),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 18, color: textColor ?? Colors.white),
+            const SizedBox(width: 8),
+          ],
+          Text(
+            text,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: textColor ?? Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -70,18 +116,24 @@ class CustomButtons {
   }) {
     return TextButton(
       style: TextButton.styleFrom(
-          backgroundColor: bgColor ?? Theme.of(context).primaryColor,
-          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius ?? 25))),
+        backgroundColor: bgColor ?? const Color(0xFF1c6ea4),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius ?? 12),
+        ),
+      ),
       child: Text(
         'Okay',
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       onPressed: () => Navigator.pop(context),
     );
   }
 
-  static CircleAvatar circleButton(
+  static Container circleButton(
     BuildContext context, {
     required IconData icon,
     required VoidCallback onPressed,
@@ -90,17 +142,25 @@ class CustomButtons {
     String? tooltip,
     Color? iconColor,
   }) {
-    return CircleAvatar(
-      radius: radius ?? 16,
-      backgroundColor: bgColor ?? Colors.grey.shade300,
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor ?? const Color(0xFF1c6ea4).withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(radius ?? 12),
+        border: Border.all(
+          color: (bgColor ?? const Color(0xFF1c6ea4)).withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
       child: IconButton(
-          tooltip: tooltip,
-          onPressed: onPressed,
-          icon: Icon(
-            icon,
-            color: iconColor ?? Theme.of(context).primaryColor,
-            size: 16,
-          )),
+        tooltip: tooltip,
+        onPressed: onPressed,
+        icon: Icon(
+          icon,
+          color: iconColor ?? const Color(0xFF1c6ea4),
+          size: 18,
+        ),
+        padding: const EdgeInsets.all(8),
+      ),
     );
   }
 }

@@ -66,6 +66,7 @@ class UserModel {
       'image_url': user.imageUrl,
       'created_at': user.createdAt,
       'platform': user.platform,
+      'device_id': user.deviceId,
     };
   }
 }

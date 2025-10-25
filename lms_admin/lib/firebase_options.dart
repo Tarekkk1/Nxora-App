@@ -53,11 +53,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-      apiKey: "AIzaSyC8YU2k4wGOWnyTBKOtsd6VMgDKpLc_XX4",
-      authDomain: "in-service-1d030.firebaseapp.com",
-      projectId: "in-service-1d030",
-      storageBucket: "in-service-1d030.firebasestorage.app",
-      messagingSenderId: "113688836597",
-      appId: "1:113688836597:web:ed99b326bf03acff1388bc",
-      measurementId: "G-40XBG1LDLH");
+      apiKey: "AIzaSyCJkX027PjyilT_ESV8qnXjx9keg9yyNsg",
+      authDomain: "nxora-33a76.firebaseapp.com",
+      projectId: "nxora-33a76",
+      storageBucket: "nxora-33a76.firebasestorage.app",
+      messagingSenderId: "192439025259",
+      appId: "1:192439025259:web:2d977ea4a27098f2927b2e",
+      measurementId: "G-9P29VLL39V"
+  );
+      
 }

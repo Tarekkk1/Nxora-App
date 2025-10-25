@@ -20,6 +20,49 @@ import 'home_latest_courses.dart';
 class HomeTab extends ConsumerWidget {
   const HomeTab({super.key});
 
+  Widget _buildActionButton({
+    required IconData icon,
+    required VoidCallback onTap,
+    bool showBadge = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.2),
+            width: 1,
+          ),
+        ),
+        child: Stack(
+          children: [
+            Icon(
+              icon,
+              size: 20,
+              color: Colors.white,
+            ),
+            if (showBadge)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(appSettingsProvider);
@@ -38,35 +81,86 @@ class HomeTab extends ConsumerWidget {
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: const AppLogo(),
-            pinned: false,
+            expandedHeight: 120,
             floating: true,
-            backgroundColor: Theme.of(context).primaryColor,
+            pinned: true,
             elevation: 0,
+            backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Colors.white,
-            actions: [
-              IconButton(
-                // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                onPressed: () {
-                  NextScreen.iOS(context, const SearchScreen());
-                },
-                icon: const Icon(FeatherIcons.search, size: 22),
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Theme.of(context).primaryColor,
+                      Theme.of(context).colorScheme.secondary,
+                    ],
+                  ),
+                ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const AppLogo(
+                                height: 32,
+                                width: 80,
+                              ),
+                            ),
+                            const Spacer(),
+                            _buildActionButton(
+                              icon: FeatherIcons.search,
+                              onTap: () => NextScreen.iOS(context, const SearchScreen()),
+                            ),
+                            const SizedBox(width: 8),
+                            _buildActionButton(
+                              icon: FeatherIcons.heart,
+                              onTap: () => NextScreen.iOS(context, const Wishlist()),
+                              showBadge: false,
+                            ),
+                            const SizedBox(width: 8),
+                            _buildActionButton(
+                              icon: LineIcons.bell,
+                              onTap: () => NextScreen.iOS(context, const Notifications()),
+                              showBadge: true,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Welcome back!',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const Text(
+                          'Discover new courses',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              IconButton(
-                style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                onPressed: () {
-                  NextScreen.iOS(context, const Wishlist());
-                },
-                icon: const Icon(FeatherIcons.heart, size: 22),
-              ),
-              IconButton(
-                // style: IconButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                onPressed: () {
-                  NextScreen.iOS(context, const Notifications());
-                },
-                icon: const Icon(LineIcons.bell),
-              ),
-            ],
+            ),
           ),
           SliverToBoxAdapter(
             child: Column(

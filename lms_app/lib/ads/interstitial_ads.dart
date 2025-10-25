@@ -28,7 +28,7 @@ class InterstitialAds extends ChangeNotifier {
             notifyListeners();
 
             // Load ad when failed to load
-            // createInterstitialAd();
+            createInterstitialAd();
           },
         ));
   }

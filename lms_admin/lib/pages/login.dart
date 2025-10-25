@@ -102,160 +102,227 @@ class _LoginState extends ConsumerState<Login> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Colors.indigo.withValues(alpha: 0.1),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF1c6ea4).withValues(alpha: 0.1),
+              const Color(0xFF1a2851).withValues(alpha: 0.05),
+            ],
+          ),
+        ),
         child: Row(
           children: [
-            Visibility(
-              visible: Responsive.isDesktop(context) ||
-                  Responsive.isDesktopLarge(context),
-              child: Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: SvgPicture.asset(
-                  AssetsConfig.loginImageString,
-                  alignment: Alignment.center,
-                  height: 400,
-                  width: 400,
-                  fit: BoxFit.contain,
+            // Left side - Logo and branding
+            if (Responsive.isDesktop(context) || Responsive.isDesktopLarge(context))
+              Expanded(
+                flex: 5,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF1c6ea4),
+                        Color(0xFF1a2851),
+                      ],
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Logo section
+                      Container(
+                        padding: const EdgeInsets.all(40),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            width: 2,
+                          ),
+                        ),
+                        child: const AppLogo(
+                          imageString: AssetsConfig.logo,
+                          height: 80,
+                          width: 280,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      // Welcome text
+                      Text(
+                        'Welcome to',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Nxora Admin Panel',
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Manage your learning management system\nwith ease and efficiency',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          height: 1.5,
+                        ),
+                      ),
+                      const SizedBox(height: 60),
+                      // Decorative element
+                      SvgPicture.asset(
+                        AssetsConfig.loginImageString,
+                        height: 200,
+                        width: 200,
+                        colorFilter: ColorFilter.mode(
+                          Colors.white.withValues(alpha: 0.3),
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 1,
-              // fit: FlexFit.tight,
-              child: Form(
-                key: formKey,
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: _getHorizontalPadding(),
-                      vertical: 30.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const AppLogo(
-                            imageString: AssetsConfig.logo,
-                            height: 60,
-                            width: 250),
-                        Text(
-                          'Sign In to the Admin Panel',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(color: Colors.blueGrey),
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Email',
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              color: Colors.grey.shade100,
-                              child: TextFormField(
-                                keyboardType: TextInputType.emailAddress,
-                                controller: emailCtlr,
-                                validator: (value) {
-                                  if (value!.isEmpty)
-                                    return 'Email is required';
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  suffixIcon: IconButton(
-                                    onPressed: () => emailCtlr.clear(),
-                                    icon: const Icon(Icons.clear),
+            
+            // Right side - Login form
+            Expanded(
+              flex: Responsive.isDesktop(context) || Responsive.isDesktopLarge(context) ? 4 : 1,
+              child: Container(
+                color: Colors.white,
+                child: Form(
+                  key: formKey,
+                  child: Center(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: _getHorizontalPadding(),
+                        vertical: 40.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Mobile logo (only shown on mobile)
+                          if (!Responsive.isDesktop(context) && !Responsive.isDesktopLarge(context))
+                            Center(
+                              child: Column(
+                                children: [
+                                  const AppLogo(
+                                    imageString: AssetsConfig.logo,
+                                    height: 60,
+                                    width: 200,
                                   ),
-                                  hintText: 'Email Address',
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.all(15),
+                                  const SizedBox(height: 20),
+                                ],
+                              ),
+                            ),
+                          
+                          // Login header
+                          Text(
+                            'Sign In',
+                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                              color: const Color(0xFF1a2851),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Access your admin dashboard',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Colors.blueGrey.shade600,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          
+                          // Email field
+                          _buildInputField(
+                            context: context,
+                            label: 'Email Address',
+                            controller: emailCtlr,
+                            keyboardType: TextInputType.emailAddress,
+                            hintText: 'Enter your email',
+                            validator: (value) {
+                              if (value!.isEmpty) return 'Email is required';
+                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                                return 'Please enter a valid email';
+                              }
+                              return null;
+                            },
+                            suffixIcon: IconButton(
+                              onPressed: () => emailCtlr.clear(),
+                              icon: const Icon(Icons.clear_rounded),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          
+                          // Password field
+                          _buildInputField(
+                            context: context,
+                            label: 'Password',
+                            controller: passwordCtrl,
+                            obscureText: _obsecureText,
+                            hintText: 'Enter your password',
+                            validator: (value) {
+                              if (value!.isEmpty) return 'Password is required';
+                              if (value.length < 6) return 'Password must be at least 6 characters';
+                              return null;
+                            },
+                            suffixIcon: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: _onChangeVisiblity,
+                                  icon: Icon(_lockIcon),
                                 ),
-                              ),
+                                IconButton(
+                                  onPressed: () => passwordCtrl.clear(),
+                                  icon: const Icon(Icons.clear_rounded),
+                                ),
+                              ],
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Text(
-                              'Password',
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              color: Colors.grey.shade100,
-                              child: TextFormField(
-                                controller: passwordCtrl,
-                                obscureText: _obsecureText,
-                                validator: (value) {
-                                  if (value!.isEmpty)
-                                    return 'Password is required';
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                    suffixIcon: Wrap(
-                                      children: [
-                                        IconButton(
-                                            onPressed: _onChangeVisiblity,
-                                            icon: Icon(_lockIcon)),
-                                        IconButton(
-                                            onPressed: () =>
-                                                passwordCtrl.clear(),
-                                            icon: const Icon(Icons.clear)),
-                                      ],
-                                    ),
-                                    hintText: 'Your Password',
-                                    border: InputBorder.none,
-                                    contentPadding: const EdgeInsets.all(15)),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 50,
-                            ),
-                            RoundedLoadingButton(
+                          ),
+                          const SizedBox(height: 40),
+                          
+                          // Login button
+                          SizedBox(
+                            width: double.infinity,
+                            height: 56,
+                            child: RoundedLoadingButton(
                               onPressed: _handleLogin,
                               controller: _btnCtlr,
-                              color: Theme.of(context).primaryColor,
-                              width: MediaQuery.of(context).size.width,
-                              borderRadius: 0,
-                              height: 55,
+                              color: const Color(0xFF1c6ea4),
+                              borderRadius: 12,
                               animateOnTap: false,
                               elevation: 0,
                               child: Text(
-                                'Login',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(color: Colors.white),
+                                'Sign In',
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                            // const SizedBox(
-                            //   height: 20,
-                            // ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     TextButton(
-                            //       child: const Text('Test Demo Admin'),
-                            //       onPressed: () => _handleDemoAdminLogin(),
-                            //     ),
-                            //   ],
-                            // ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          
+                          const SizedBox(height: 24),
+                          
+                          // Footer
+                          Center(
+                            child: Text(
+                              '© 2024 Nxora. All rights reserved.',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.blueGrey.shade400,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -264,6 +331,58 @@ class _LoginState extends ConsumerState<Login> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInputField({
+    required BuildContext context,
+    required String label,
+    required TextEditingController controller,
+    required String hintText,
+    required String? Function(String?) validator,
+    TextInputType? keyboardType,
+    bool obscureText = false,
+    Widget? suffixIcon,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            color: const Color(0xFF1a2851),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.grey.shade200,
+              width: 1,
+            ),
+          ),
+          child: TextFormField(
+            controller: controller,
+            keyboardType: keyboardType,
+            obscureText: obscureText,
+            validator: validator,
+            style: Theme.of(context).textTheme.bodyMedium,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: TextStyle(color: Colors.grey.shade500),
+              suffixIcon: suffixIcon,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

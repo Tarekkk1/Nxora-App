@@ -80,22 +80,34 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: !splashIconAnimationEnabled
-          ? const Center(child: SplashLogo())
-          : MirrorAnimationBuilder<double>(
-              curve: Curves.easeInOut,
-              tween: Tween(begin: 100.0, end: 200),
-              duration: const Duration(milliseconds: 900),
-              builder: (context, value, _) {
-                return Center(
-                  child: SizedBox(
-                    height: value,
-                    width: value,
-                    child: const SplashLogo(),
-                  ),
-                );
-              },
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF1c6ea4),
+              Color(0xFF1a2851),
+            ],
+          ),
+        ),
+        child: !splashIconAnimationEnabled
+            ? const Center(child: SplashLogo())
+            : MirrorAnimationBuilder<double>(
+                curve: Curves.easeInOut,
+                tween: Tween(begin: 100.0, end: 200),
+                duration: const Duration(milliseconds: 900),
+                builder: (context, value, _) {
+                  return Center(
+                    child: SizedBox(
+                      height: value,
+                      width: value,
+                      child: const SplashLogo(),
+                    ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

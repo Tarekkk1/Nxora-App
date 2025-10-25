@@ -106,21 +106,77 @@ mixin AppBarMixin implements UserMixin, Responsive {
     BuildContext context, {
     required String title,
     required List<Widget> buttons,
+    String? subtitle,
+    IconData? icon,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      height: 60,
-      width: double.infinity,
-      color: AppConfig.titleBarColor,
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      margin: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(
+          color: Colors.grey.withValues(alpha: 0.1),
+          width: 1,
+        ),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.blue),
+          if (icon != null) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1c6ea4).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: const Color(0xFF1c6ea4),
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: const Color(0xFF1a2851),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.blueGrey.shade600,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
-          const Spacer(),
-          ...buttons
+          const SizedBox(width: 16),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: buttons.map((button) => Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: button,
+            )).toList(),
+          ),
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lms_app/configs/features_config.dart';
+import 'package:lms_app/services/device_service.dart';
 import 'package:lms_app/services/firebase_service.dart';
 import 'package:lms_app/utils/snackbars.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
@@ -22,7 +23,8 @@ class _SocialLoginsState extends State<SocialLogins> {
   final fbController = RoundedLoadingButtonController();
   final appleController = RoundedLoadingButtonController();
 
-  UserModel _userModel(UserCredential userCredential) {
+  Future<UserModel> _userModel(UserCredential userCredential) async {
+    final deviceId = await DeviceService.getDeviceId();
     final UserModel user = UserModel(
       id: userCredential.user!.uid,
       email: userCredential.user?.email ?? 'No Email',
@@ -30,6 +32,7 @@ class _SocialLoginsState extends State<SocialLogins> {
       createdAt: DateTime.now().toUtc(),
       imageUrl: userCredential.user?.photoURL,
       platform: Platform.isAndroid ? 'Android' : 'iOS',
+      deviceId: deviceId,
     );
     return user;
   }
@@ -37,7 +40,8 @@ class _SocialLoginsState extends State<SocialLogins> {
   _validateData(UserCredential userCredential) async {
     bool userExists = await FirebaseService().isUserExists(userCredential.user!.uid);
     if (!userExists) {
-      await FirebaseService().saveUserData(_userModel(userCredential)).then((value) async {
+      final userModel = await _userModel(userCredential);
+      await FirebaseService().saveUserData(userModel).then((value) async {
         await FirebaseService().updateUserStats();
         widget.afterSignIn();
       });

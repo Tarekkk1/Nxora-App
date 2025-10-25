@@ -18,6 +18,18 @@ class MyApp extends ConsumerWidget {
         useMaterial3: false,
         fontFamily: 'Poppins',
         primaryColor: AppConfig.themeColor,
+        scaffoldBackgroundColor: AppConfig.scffoldBgColor,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppConfig.themeColor,
+          primary: AppConfig.themeColor,
+          secondary: const Color(0xFF1a2851),
+          surface: AppConfig.scffoldBgColor,
+          background: AppConfig.scffoldBgColor,
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppConfig.themeColor,
+          foregroundColor: Colors.white,
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: TextTheme(
           titleMedium: TextStyle(fontWeight: FontWeight.w500),

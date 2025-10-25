@@ -14,33 +14,43 @@ class Categories extends ConsumerWidget with CategoriesMixin {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      color: Colors.white,
+      color: const Color(0xFFF8FAFC),
       child: Column(
         children: [
-          AppBarMixin.buildTitleBar(context, title: 'Categories', buttons: [
-            CustomButtons.customOutlineButton(
-              context,
-              icon: LineIcons.sortAmountDown,
-              text: 'Set Order',
-              bgColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-              onPressed: () {
-                CustomDialogs.openResponsiveDialog(context, widget: const SetCategoryOrder());
-              },
+          AppBarMixin.buildTitleBar(
+            context, 
+            title: 'Categories Management', 
+            subtitle: 'Organize your courses with categories',
+            icon: LineIcons.layerGroup,
+            buttons: [
+              CustomButtons.customOutlineButton(
+                context,
+                icon: LineIcons.sortAmountDown,
+                text: 'Set Order',
+                bgColor: const Color(0xFF1c6ea4),
+                foregroundColor: Colors.white,
+                onPressed: () {
+                  CustomDialogs.openResponsiveDialog(context, widget: const SetCategoryOrder());
+                },
+              ),
+              CustomButtons.customOutlineButton(
+                context,
+                icon: Icons.add_rounded,
+                text: 'Add Category',
+                bgColor: const Color(0xFF1c6ea4),
+                foregroundColor: Colors.white,
+                onPressed: () {
+                  CustomDialogs.openResponsiveDialog(context, widget: const CategoryForm(category: null));
+                },
+              ),
+            ]
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              child: buildCategories(context, ref: ref),
             ),
-            const SizedBox(width: 10),
-            CustomButtons.customOutlineButton(
-              context,
-              icon: Icons.add,
-              text: 'Add Category',
-              bgColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-              onPressed: () {
-                CustomDialogs.openResponsiveDialog(context, widget: const CategoryForm(category: null));
-              },
-            ),
-          ]),
-          buildCategories(context, ref: ref)
+          ),
         ],
       ),
     );

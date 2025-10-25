@@ -22,30 +22,73 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isAuthor = role == UserRoles.author ? true : false;
     return Drawer(
-      elevation: 0.5,
-      backgroundColor: Theme.of(context).primaryColor,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 20, top: 30),
-        child: Column(
-          children: [
-            const AppLogo(imageString: AssetsConfig.logoDark),
-            const SizedBox(height: 30),
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: isAuthor ? menuListAuthor.length : menuList.length,
-              itemBuilder: (BuildContext context, int index) {
-                String title = isAuthor ? menuListAuthor[index]![0] : menuList[index]![0];
-                IconData icon = isAuthor ? menuListAuthor[index]![1] : menuList[index]![1];
-                return _DrawerListTile(
-                  title: title,
-                  icon: icon,
-                  index: index,
-                  scaffoldKey: scaffoldKey,
-                );
-              },
-            ),
-          ],
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF1c6ea4),
+              Color(0xFF1a2851),
+            ],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 20, top: 40),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          width: 1,
+                        ),
+                      ),
+                      child: const AppLogo(
+                        imageString: AssetsConfig.logoDark,
+                        height: 40,
+                        width: 140,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      isAuthor ? 'Author Panel' : 'Admin Panel',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: isAuthor ? menuListAuthor.length : menuList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  String title = isAuthor ? menuListAuthor[index]![0] : menuList[index]![0];
+                  IconData icon = isAuthor ? menuListAuthor[index]![1] : menuList[index]![1];
+                  return _DrawerListTile(
+                    title: title,
+                    icon: icon,
+                    index: index,
+                    scaffoldKey: scaffoldKey,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -66,25 +109,45 @@ class _DrawerListTile extends ConsumerWidget {
     bool selected = menuIndex == index;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-      child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        tileColor: selected ? Colors.white : Colors.transparent,
-        onTap: () => _onTap(context, ref, menuIndex),
-        horizontalTitleGap: 0.0,
-        leading: Icon(
-          icon,
-          size: 20,
-          color: selected ? Theme.of(context).primaryColor : Colors.white,
+      padding: const EdgeInsets.fromLTRB(15, 4, 15, 4),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: selected ? Colors.white.withValues(alpha: 0.15) : Colors.transparent,
+          border: selected ? Border.all(
+            color: Colors.white.withValues(alpha: 0.3),
+            width: 1,
+          ) : null,
         ),
-        title: Text(
-          title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(color: selected ? Theme.of(context).primaryColor : Colors.white, fontWeight: FontWeight.w500),
+        child: ListTile(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          onTap: () => _onTap(context, ref, menuIndex),
+          horizontalTitleGap: 12.0,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          leading: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: selected 
+                  ? Colors.white.withValues(alpha: 0.2)
+                  : Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 18,
+              color: Colors.white,
+            ),
+          ),
+          title: Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+              fontSize: 15,
+            ),
+          ),
         ),
       ),
     );
