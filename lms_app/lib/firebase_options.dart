@@ -65,6 +65,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'in-service-1d030.firebasestorage.app',
     androidClientId: '113688836597-r5br5rcvfs985hgo7392tg8tstvd8bi6.apps.googleusercontent.com',
     iosClientId: '113688836597-954mrcaumtshcl1t7pqu32kkr5fbgpdf.apps.googleusercontent.com',
-    iosBundleId: 'com.tarekzeyadproduction.inservice',
+    iosBundleId: 'com.tarekzeyadproductions.nxora',
   );
 }
