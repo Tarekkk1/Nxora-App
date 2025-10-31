@@ -23,7 +23,7 @@
 [32m+[m[32m}[m
  [m
  android {[m
-     namespace "com.tarekzeyadproduction.inservice"[m
+     namespace "com.tarekzeyadproductions.nxora"[m
 [36m@@ -54,7 +61,7 @@[m [mandroid {[m
          // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.[m
          minSdkVersion 23[m
